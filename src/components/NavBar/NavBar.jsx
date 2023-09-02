@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 
 const NavBar = ({ isNavBarOpen, toggleNavBarStatus }) => {
   const [isVisible, setIsVisible] = useState(isNavBarOpen);
+  const [navbarClasses, setNavbarClasses] = useState([classes.navbar]);
 
   const handleTransitionEnd = () => {
     !isNavBarOpen && setIsVisible(false);
@@ -15,11 +16,11 @@ const NavBar = ({ isNavBarOpen, toggleNavBarStatus }) => {
     isNavBarOpen && setIsVisible(true);
   }, [isNavBarOpen]);
 
-  const navbarClasses = [classes.navbar];
-
-  isNavBarOpen
-  ? navbarClasses.push(classes['slideIn'])
-  : navbarClasses.push(classes['slideOut']);
+  useEffect(() => {
+    isNavBarOpen
+    ? setNavbarClasses([classes['slideIn'], ...[classes.navbar]])
+    : setNavbarClasses([classes['slideOut'], ...[classes.navbar]]);
+  }, [isNavBarOpen])
 
   return (
     isVisible && (

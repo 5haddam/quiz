@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import controller from '../../API/controller';
 import API from '../../API/API';
@@ -12,8 +12,8 @@ const QuizPreview = () => {
   const [data, setData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchData = async () => {
+  const fetchData = useCallback(() => {
+    const fetchingData = async () => {
       try {
         const result = await controller(`${API}/quizzes/${quizId}`);
         setData(result);
@@ -21,10 +21,14 @@ const QuizPreview = () => {
       } catch (error) {
         console.error(error);
       }
-    };
+    }
 
+    fetchingData()
+  }, [quizId]);
+
+  useEffect(() => {
     fetchData();
-  });
+  }, [fetchData]);
 
   return (
     <div style={{ width: '100%', padding: '20px', maxWidth: '1000px', margin: '75px auto' }} >

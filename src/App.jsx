@@ -10,7 +10,7 @@ import QuizPreview from './pages/QuizPreview/QuizPreview';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
 function App() {
-  const [auth, setAuth] = React.useState(false); // in the future I plan to make user authorization
+  const [auth, setAuth] = useState(false); // in the future I plan to make user authorization
   // и ещё, да, я знаю что оно выглядит как из 2007. Надо подумать над дизайном, может прийдет что-то нормальное в голову
   const [isNavBarOpen, setNavBarStatus] = useState(false);
 

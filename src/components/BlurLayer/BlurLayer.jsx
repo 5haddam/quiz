@@ -3,6 +3,7 @@ import classes from './BlurLayer.module.css'
 
 const BlurLayer = ({ isNavBarOpen, toggleNavBarStatus }) => {
   const [isVisible, setIsVisible] = useState(isNavBarOpen);
+  const [blurLayerClasses, setBlurLayerClasses] = useState([classes.blurLayer]);
 
   const handleTransitionEnd = () => {
     !isNavBarOpen && setIsVisible(false);
@@ -12,11 +13,11 @@ const BlurLayer = ({ isNavBarOpen, toggleNavBarStatus }) => {
     isNavBarOpen && setIsVisible(true);
   }, [isNavBarOpen]);
 
-  const blurLayerClasses = [classes.blurLayer];
-  
-  isNavBarOpen 
-  ? blurLayerClasses.push(classes['fadeIn'])
-  : blurLayerClasses.push(classes['fadeOut']);
+  useEffect(() => {
+    isNavBarOpen
+    ? setBlurLayerClasses([classes['fadeIn'], ...[classes.blurLayer]])
+    : setBlurLayerClasses([classes['fadeOut'], ...[classes.blurLayer]]);
+  }, [isNavBarOpen])
   
 
   return (

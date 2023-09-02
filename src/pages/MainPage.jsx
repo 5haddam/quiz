@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import controller from '../API/controller';
 import API from '../API/API';
 import classes from '../styles/MainPage.module.css'
@@ -11,8 +11,9 @@ const MainPage = () => {
   const [data, setData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchData = async () => {
+
+  const fetchData = useCallback(() => {
+    const fetchingData = async () => {
       try {
         const result = await controller(`${API}/quizzes`);
         setData(result);
@@ -20,10 +21,14 @@ const MainPage = () => {
       } catch (error) {
         console.error(error);
       }
-    };
+    }
 
-    fetchData();
+    fetchingData()
   }, []);
+
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
 
   return (
     <div className={classes.main}>
@@ -31,7 +36,7 @@ const MainPage = () => {
         <Loader />
       ) : (
         <>
-          <h1 style={{textAlign: "center"}}>Choose your quiz!!!</h1>
+          <h1 style={{ textAlign: "center" }}>Choose your quiz!!!</h1>
           {data.map((quiz, index) => (
             <Link key={index} to={`quiz/${quiz.id}`} className={classes.link}>
               <QuizCard quiz={quiz} index={index} isRenderFullData={false} />
