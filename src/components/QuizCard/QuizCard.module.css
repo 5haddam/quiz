@@ -1,0 +1,37 @@
+.quizContainer {
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin: 40px 0;
+  border-radius: 12px;
+  position: relative;
+}
+
+.quizTitle {
+  font-size: 24px;
+  margin-bottom: 10px;
+  margin-left: 5px;
+  color: #0000aa;
+}
+
+.gradient {
+  position: absolute;
+  z-index: 1;
+  max-height: 80%;
+  min-height: 80%;
+  width: calc(100% + 2px);
+  left: -1px;
+  bottom: -1px;
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 40%, rgba(255, 255, 255, 1) 100%);
+  border-radius: 12px;
+}
+
+@media screen and (max-width: 768px) {
+  .questionCard {
+    padding: 10px;
+  }
+
+  .quizTitle {
+    font-size: 20px;
+  }
+}
