@@ -1,37 +1,72 @@
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import './styles/App.css';
-import Header from './components/Header';
-import BlurLayer from './components/BlurLayer/BlurLayer';
-import NavBar from './components/NavBar/NavBar';
-import MainPage from './pages/MainPage';
-import Footer from './components/Footer';
+import { ThemeProvider } from '@mui/material/styles';
+import Template from './components/Template/Template';
+import MainPage from './pages/MainPage/MainPage';
 import NotFound from './pages/NotFound/NotFound';
 import QuizPreview from './pages/QuizPreview/QuizPreview';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import Profile from './pages/Profile/Profile';
+import CreateQuizPage from './pages/CreateQuizPage/CreateQuizPage';
+import LoginPage from './pages/LoginPage/LoginPage';
+import SignInPage from './pages/SignInPage/SignInPage';
+import StartQuizPage from './pages/StartQuizPage/StartQuizPage';
+import { darkModeTheme, lightModeTheme } from './styles/Themes';
+import { AppDiv } from './styles/styled';
+import controller from './API/controller';
+import { userAndCategoriesAPI } from './API/API';
 
 function App() {
-  const [auth, setAuth] = useState(false); // in the future I plan to make user authorization
-  // и ещё, да, я знаю что оно выглядит как из 2007. Надо подумать над дизайном, может прийдет что-то нормальное в голову
-  const [isNavBarOpen, setNavBarStatus] = useState(false);
+  const [isAuth, setIsAuth] = useState(localStorage.getItem('isAuth') || false);
+  const [data, setData] = useState(null);
+  const [currentTheme, setCurrentTheme] = useState(localStorage.getItem('theme') || 'dark');
 
-  const toggleNavBarStatus = () => {
-    setNavBarStatus(!isNavBarOpen);
-  }
-  
+  const toggleTheme = () => {
+    setCurrentTheme(currentTheme === 'light' ? 'dark' : 'light');
+    localStorage.setItem('theme', currentTheme);
+  };
+
+  useEffect(() => {
+    localStorage.setItem('theme', currentTheme);
+  }, [currentTheme]);
+
+  const fetchData = useCallback(() => {
+    const fetchingData = async () => {
+      try {
+        const result = await controller(`${userAndCategoriesAPI}/users/2`);
+        setData(result);
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.error(error);
+      }
+    };
+
+    fetchingData();
+  }, []);
+
+  useEffect(() => {
+    fetchData();
+  }, [fetchData, isAuth]);
+
   return (
-    <Router>
-      <div className="App">
-        <Header toggleNavBarStatus={toggleNavBarStatus} auth={auth} />
-        <BlurLayer isNavBarOpen={isNavBarOpen} toggleNavBarStatus={toggleNavBarStatus} />
-        <NavBar isNavBarOpen={isNavBarOpen} toggleNavBarStatus={toggleNavBarStatus} />
-        <Routes>
-          <Route exact path='/' element={<MainPage />} />
-          <Route path='*' element={<NotFound />} />
-          <Route exact path='/quiz/:quizId' element={<QuizPreview auth={auth} />} />
-        </Routes>
-        <Footer />
-      </div>
-    </Router>
+    <ThemeProvider theme={currentTheme === 'light' ? lightModeTheme : darkModeTheme} >
+      <Router>
+        <AppDiv>
+          <Routes>
+            <Route element={<Template toggleTheme={toggleTheme} isAuth={isAuth} data={data} />}>
+              <Route path='/' element={<MainPage />} />
+              <Route path='*' element={<NotFound />} />
+              <Route path='/quiz/:quizId' element={<QuizPreview />} />
+              <Route path='/quiz/start/:quizId' element={<StartQuizPage />} />
+              <Route path='/profile' element={<Profile isAuth={isAuth} setIsAuth={setIsAuth} />} />
+              <Route path='/createquiz' element={<CreateQuizPage isAuth={isAuth} userData={data} />} />
+              <Route path='/login' element={<LoginPage setIsAuth={setIsAuth} />} />
+              <Route path='/signin' element={<SignInPage setIsAuth={setIsAuth} />} />
+            </Route>
+          </Routes>
+        </AppDiv>
+      </Router>
+    </ThemeProvider>
   );
 }
 
