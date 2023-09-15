@@ -5,9 +5,11 @@ const Timer = ({
 }) => {
   const [timerCompleted, setTimerCompleted] = useState(false);
 
-  const updateTimer = () => {
-    setTime((prev) => {
-      const newTime = { ...prev };
+  useEffect(() => {
+    let intervalId;
+
+    const updateTimer = () => {
+      const newTime = { ...time };
 
       if (newTime.sec < 59) newTime.sec += 1;
       else {
@@ -16,25 +18,21 @@ const Timer = ({
       }
 
       if (newTime.min === maxTime) {
-        let intervalId;
         clearInterval(intervalId);
         setTimerCompleted(true);
       }
 
-      return newTime;
-    });
-  };
-
-  useEffect(() => {
-    let intervalId;
+      setTime(newTime);
+    };
 
     if (!timerCompleted) {
       intervalId = setInterval(updateTimer, 1000);
     }
+
     return () => {
       clearInterval(intervalId);
     };
-  }, [timerCompleted]);
+  }, [timerCompleted, maxTime, time, setTime]);
 
   useEffect(() => {
     if (timerCompleted) {

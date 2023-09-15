@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { Component } from 'react';
 import {
   Radio,
   FormControl,
@@ -8,47 +8,53 @@ import {
 } from '@mui/material';
 import { ButtonDiv, LabelForm } from './styled';
 
-const OneAnswerQuestion = ({
-  handleSubmit,
-  currentQuestionIndex,
-  handleAnswerChange,
-  currentQuestion,
-  questionArrayLength,
-}) => {
-  const [selectedValue, setSelectedValue] = useState(null);
+class OneAnswerQuestion extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      selectedValue: null,
+    };
+  }
 
-  const handleNext = () => {
+  handleNext = () => {
+    const { selectedValue } = this.state;
+    const { handleSubmit, handleAnswerChange, currentQuestion } = this.props;
     if (selectedValue !== null && currentQuestion.options[selectedValue].isRight) handleAnswerChange(1);
+    this.setState({ selectedValue: null });
     handleSubmit();
   };
 
-  return (
-    <div>
+  render() {
+    const { currentQuestionIndex, currentQuestion, questionArrayLength } = this.props;
+
+    return (
       <div>
-        <FormControl component="fieldset">
-          <LabelForm>Select one answer:</LabelForm>
-          <RadioGroup
-            name={`question-${currentQuestionIndex}`}
-            onChange={(e) => setSelectedValue(e.target.value)}
-          >
-            {currentQuestion.options.map((option, optionIndex) => (
-              <FormControlLabel
-                key={optionIndex}
-                value={optionIndex.toString()}
-                control={<Radio />}
-                label={option.option}
-              />
-            ))}
-          </RadioGroup>
-        </FormControl>
+        <div>
+          <FormControl component="fieldset">
+            <LabelForm>Select one answer:</LabelForm>
+            <RadioGroup
+              name={`question-${currentQuestionIndex}`}
+              onChange={(e) => this.setState({ selectedValue: e.target.value })}
+            >
+              {currentQuestion.options.map((option, optionIndex) => (
+                <FormControlLabel
+                  key={optionIndex}
+                  value={optionIndex.toString()}
+                  control={<Radio />}
+                  label={option.option}
+                />
+              ))}
+            </RadioGroup>
+          </FormControl>
+        </div>
+        <ButtonDiv>
+          <Button onClick={this.handleNext} variant="contained" color="primary">
+            {currentQuestionIndex === questionArrayLength ? 'Finish' : 'Next Question'}
+          </Button>
+        </ButtonDiv>
       </div>
-      <ButtonDiv>
-        <Button onClick={handleNext} variant="contained" color="primary">
-          {currentQuestionIndex === questionArrayLength ? 'Finish' : 'Next Question'}
-        </Button>
-      </ButtonDiv>
-    </div>
-  );
-};
+    );
+  }
+}
 
 export default OneAnswerQuestion;
