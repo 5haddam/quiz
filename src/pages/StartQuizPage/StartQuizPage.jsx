@@ -1,19 +1,19 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { Divider } from '@mui/material';
+import { Grid } from '@mui/material';
 import controller from '../../API/controller';
 import { API } from '../../API/API';
 import Loader from '../../components/Loader/Loader';
-import QuestionCard from '../../components/QuestionCards/QuestionCards';
-import StartQuiz from '../../components/StartQuiz/StartQuiz';
-import { QuizPreviewDiv } from './styled';
+import {
+  QuizStartDiv, Title, imageGrid, titleGrid,
+} from './styled';
+import { MaxSizeImage } from '../../styles/styled';
+import QuestionCard from '../../components/QuestionCard/QuestionCard';
 
-const QuizPreview = () => {
+const StartQuizPage = () => {
   const { quizId } = useParams();
   const [data, setData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [[totalScore, numberOfRatings], setRating] = useState([0, 0]);
-  const rating = numberOfRatings >= 1 ? totalScore / numberOfRatings : 0;
 
   const fetchData = useCallback(() => {
     const fetchingData = async () => {
@@ -21,7 +21,6 @@ const QuizPreview = () => {
         const result = await controller(`${API}/quizzes/${quizId}/questions/${quizId}`);
         setData(result);
         setIsLoading(false);
-        setRating(result.mainData.rating);
       } catch (error) {
         // eslint-disable-next-line no-console
         console.error(error);
@@ -34,20 +33,25 @@ const QuizPreview = () => {
   useEffect(() => {
     fetchData();
   }, [fetchData]);
-
   return (
-    <QuizPreviewDiv>
+    <QuizStartDiv>
       {isLoading ? (
         <Loader />
       ) : (
         <>
-          <StartQuiz data={data} rating={rating} quizId={quizId} />
-          <Divider />
+          <Grid container spacing={3}>
+            <Grid item xs={8} sx={titleGrid}>
+              <Title>{data.mainData.title}</Title>
+            </Grid>
+            <Grid item xs={4} sx={imageGrid}>
+              <MaxSizeImage src={data.mainData.image} />
+            </Grid>
+          </Grid>
           <QuestionCard quiz={data} />
         </>
       )}
-    </QuizPreviewDiv>
+    </QuizStartDiv>
   );
 };
 
-export default QuizPreview;
+export default StartQuizPage;
