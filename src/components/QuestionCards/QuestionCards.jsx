@@ -3,11 +3,9 @@ import {
   Option, OptionList, QuestionCardDiv, QuestionText,
 } from './styled';
 
-const QuestionCard = ({ quiz, isRenderFullData }) => {
-  const lastItemForRender = isRenderFullData ? quiz.questionsArray.length : 2;
-  return (
+const QuestionCard = ({ quiz }) => (
     <>
-      {quiz.questionsArray.slice(0, lastItemForRender).map((question, questionIndex) => (
+      {quiz.questionsArray.map((question, questionIndex) => (
         <QuestionCardDiv key={questionIndex}>
           <QuestionText>{question.question}</QuestionText>
           <OptionList>
@@ -22,7 +20,6 @@ const QuestionCard = ({ quiz, isRenderFullData }) => {
         </QuestionCardDiv>
       ))}
     </>
-  );
-};
+);
 
 export default QuestionCard;
