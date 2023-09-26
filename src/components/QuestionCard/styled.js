@@ -12,3 +12,9 @@ export const TitleAndTimer = styled('div')(() => ({
   alignItems: 'center',
   justifyContent: 'space-between',
 }));
+
+export const ResultsWrapper = styled('div')(() => ({
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'space-between',
+}));

@@ -1,11 +1,14 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 import {
   Option, OptionList, QuestionCardDiv, QuestionText,
 } from './styled';
 
-const QuestionCard = ({ quiz }) => (
+const QuestionCard = () => {
+  const { quizData } = useSelector((state) => state.quizDataReducer);
+  return (
     <>
-      {quiz.questionsArray.map((question, questionIndex) => (
+      {quizData.questionsArray.map((question, questionIndex) => (
         <QuestionCardDiv key={questionIndex}>
           <QuestionText>{question.question}</QuestionText>
           <OptionList>
@@ -20,6 +23,7 @@ const QuestionCard = ({ quiz }) => (
         </QuestionCardDiv>
       ))}
     </>
-);
+  );
+};
 
 export default QuestionCard;

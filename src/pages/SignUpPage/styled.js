@@ -1,7 +1,7 @@
 import { styled } from '@mui/material/styles';
 import { Link } from 'react-router-dom';
 
-export const LoginFormWrapper = styled('div')(() => ({
+export const SignInFormWrapper = styled('div')(() => ({
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',

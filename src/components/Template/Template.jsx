@@ -4,22 +4,18 @@ import Header from '../Header/Header';
 import SideBar from '../SideBar/SideBar';
 import Footer from '../Footer/Footer';
 
-const Template = ({
-  toggleTheme, isAuth, data,
-}) => {
+const Template = () => {
   const [isNavBarOpen, setNavBarStatus] = useState(false);
   const toggleNavBarStatus = () => {
     setNavBarStatus(!isNavBarOpen);
   };
+
   return (
     <>
-      <Header toggleNavBarStatus={toggleNavBarStatus} isAuth={isAuth} data={data} />
+      <Header toggleNavBarStatus={toggleNavBarStatus} />
       <SideBar
         isNavBarOpen={isNavBarOpen}
         toggleNavBarStatus={toggleNavBarStatus}
-        toggleTheme={toggleTheme}
-        isAuth={isAuth}
-        data={data}
       />
       <Outlet />
       <Footer />

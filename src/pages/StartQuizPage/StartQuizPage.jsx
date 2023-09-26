@@ -1,38 +1,32 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { Grid } from '@mui/material';
-import controller from '../../API/controller';
-import { API } from '../../API/API';
+import { useDispatch, useSelector } from 'react-redux';
 import Loader from '../../components/Loader/Loader';
 import {
   QuizStartDiv, Title, imageGrid, titleGrid,
 } from './styled';
-import { MaxSizeImage } from '../../styles/styled';
 import QuestionCard from '../../components/QuestionCard/QuestionCard';
+import { MaxSizeImage } from '../../styles/styled';
+import thunks from '../../store/services/quizData/thunks';
 
 const StartQuizPage = () => {
   const { quizId } = useParams();
-  const [data, setData] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const { isLoading, quizData } = useSelector((state) => state.quizDataReducer);
+  const dispatch = useDispatch();
 
-  const fetchData = useCallback(() => {
-    const fetchingData = async () => {
-      try {
-        const result = await controller(`${API}/quizzes/${quizId}/questions/${quizId}`);
-        setData(result);
-        setIsLoading(false);
-      } catch (error) {
-        // eslint-disable-next-line no-console
-        console.error(error);
-      }
-    };
-
-    fetchingData();
-  }, [quizId]);
+  const fetchQuizData = useCallback(async () => {
+    try {
+      await dispatch(thunks.fetchQuizData(quizId));
+    } catch (err) {
+      // eslint-disable-next-line no-console
+      console.log(err);
+    }
+  }, [dispatch]);
 
   useEffect(() => {
-    fetchData();
-  }, [fetchData]);
+    if (quizData.id !== quizId) fetchQuizData();
+  }, [fetchQuizData]);
   return (
     <QuizStartDiv>
       {isLoading ? (
@@ -41,13 +35,13 @@ const StartQuizPage = () => {
         <>
           <Grid container spacing={3}>
             <Grid item xs={8} sx={titleGrid}>
-              <Title>{data.mainData.title}</Title>
+              <Title>{quizData.mainData.title}</Title>
             </Grid>
             <Grid item xs={4} sx={imageGrid}>
-              <MaxSizeImage src={data.mainData.image} />
+              <MaxSizeImage src={quizData.mainData.image} />
             </Grid>
           </Grid>
-          <QuestionCard quiz={data} />
+          <QuestionCard />
         </>
       )}
     </QuizStartDiv>

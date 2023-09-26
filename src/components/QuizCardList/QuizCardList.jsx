@@ -2,14 +2,22 @@ import React from 'react';
 import {
   Rating, Grid, Stack,
 } from '@mui/material';
+import { useDispatch } from 'react-redux';
 import {
   imageAndRating, ratingStyle, titleAndCategories, categories, Title, LinkToQuiz,
 } from './styled';
 import { MaxSizeImage, StyledChip } from '../../styles/styled';
+import actions from '../../store/services/quizzes/actions';
 
-const QuizCardList = ({ quiz, setSearchParams }) => {
+const QuizCardList = ({ quiz }) => {
   const [totalScore, numberOfRatings] = quiz.rating;
   const rating = numberOfRatings >= 1 ? totalScore / numberOfRatings : 0;
+
+  const dispatch = useDispatch();
+
+  const handleChangeFilter = (category) => {
+    dispatch(actions.filterAction(category));
+  };
 
   return (
     <div>
@@ -20,7 +28,7 @@ const QuizCardList = ({ quiz, setSearchParams }) => {
           </LinkToQuiz>
           <Stack direction="row" sx={categories}>
             {quiz.categories.map((category, index) => (
-              <StyledChip key={index} label={category} variant="outlined" onClick={() => setSearchParams(category)}/>
+              <StyledChip key={index} label={category} variant="outlined" onClick={() => handleChangeFilter(category)}/>
             ))}
           </Stack>
         </Grid>
