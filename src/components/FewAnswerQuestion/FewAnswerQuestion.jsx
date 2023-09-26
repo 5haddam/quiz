@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   Button,
   Checkbox,
@@ -7,55 +7,59 @@ import {
 } from '@mui/material';
 import { ButtonDiv, LabelForm } from './styled';
 
-const FewAnswerQuestion = ({
-  handleSubmit,
-  currentQuestionIndex,
-  handleAnswerChange,
-  currentQuestion,
-  questionArrayLength,
-}) => {
-  const [selectedValues, setSelectedValues] = useState({});
+class FewAnswerQuestion extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      selectedValues: {},
+    };
+  }
 
-  const handleNext = () => {
-    const selectedValuesArray = Object.keys(selectedValues).filter((key) => selectedValues[key] === true);
+  handleNext = () => {
+    const selectedValuesArray = Object.keys(this.state.selectedValues)
+      .filter((key) => this.state.selectedValues[key] === true);
     let points = 0;
     selectedValuesArray.forEach((value) => {
-      if (currentQuestion.options[value].isRight) {
+      if (this.props.currentQuestion.options[value].isRight) {
         points += 1;
       } else {
         points -= 1;
       }
     });
-    handleAnswerChange(points >= 0 ? points : 0);
-    handleSubmit();
+    this.props.handleAnswerChange(points >= 0 ? points : 0);
+    this.props.handleSubmit();
   };
 
-  return (
-    <div>
+  render() {
+    return (
       <div>
-        <FormControl component="fieldset">
-          <LabelForm>Select one or more answers:</LabelForm>
-          {currentQuestion.options.map((option, optionIndex) => (
-            <FormControlLabel
-              control={
-                <Checkbox
-                  name={`${optionIndex}`}
-                  onChange={(e) => setSelectedValues({ ...selectedValues, [e.target.name]: e.target.checked })}
-                />
-              }
-              label={option.option}
-              key={optionIndex}
-            />
-          ))}
-        </FormControl>
+        <div>
+          <FormControl component="fieldset">
+            <LabelForm>Select one or more answers:</LabelForm>
+            {this.props.currentQuestion.options.map((option, optionIndex) => (
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    name={`${optionIndex}`}
+                    onChange={(e) => this.setState({
+                      selectedValues: { ...this.state.selectedValues, [e.target.name]: e.target.checked },
+                    })}
+                  />
+                }
+                label={option.option}
+                key={optionIndex}
+              />
+            ))}
+          </FormControl>
+        </div>
+        <ButtonDiv>
+          <Button onClick={this.handleNext} variant="contained" color="primary">
+            {this.props.currentQuestionIndex === this.props.questionArrayLength ? 'Finish' : 'Next Question'}
+          </Button>
+        </ButtonDiv>
       </div>
-      <ButtonDiv>
-        <Button onClick={handleNext} variant="contained" color="primary">
-          {currentQuestionIndex === questionArrayLength ? 'Finish' : 'Next Question'}
-        </Button>
-      </ButtonDiv>
-    </div>
-  );
-};
+    );
+  }
+}
 
 export default FewAnswerQuestion;
