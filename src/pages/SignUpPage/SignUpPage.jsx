@@ -36,6 +36,7 @@ const SignUpPage = () => {
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { isMobile } = useSelector((state) => (state.viewModeReducer));
   const { isAuth, usersData } = useSelector((state) => state.userInfoReducer);
 
   const handleFileChange = (event) => {
@@ -198,7 +199,11 @@ const SignUpPage = () => {
           noValidate
           autoComplete="off"
           sx={{
-            margin: 'auto 100px', width: '320px', height: '590px', display: 'flex', flexDirection: 'column',
+            margin: `auto ${isMobile ? '60px' : '100px'}`,
+            width: '320px',
+            height: '590px',
+            display: 'flex',
+            flexDirection: 'column',
           }}
         >
           <LinkContainer><p>Already have an account? <StyledLink to='/login'>Login</StyledLink></p></LinkContainer>

@@ -18,6 +18,7 @@ const LoginPage = () => {
   const [isDispatchIsPossible, setIsDispatchIsPossible] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { isMobile } = useSelector((state) => (state.viewModeReducer));
   const { isAuth, usersData } = useSelector((state) => state.userInfoReducer);
 
   const redirectToMainPage = () => {
@@ -70,7 +71,11 @@ const LoginPage = () => {
         noValidate
         autoComplete="off"
         sx={{
-          margin: 'auto 100px', width: '320px', height: '320px', display: 'flex', flexDirection: 'column',
+          margin: `auto ${isMobile ? '60px' : '100px'}`,
+          width: '320px',
+          height: '320px',
+          display: 'flex',
+          flexDirection: 'column',
         }}
       >
         <LinkContainer><p>Don`t have an account? <StyledLink to='/signup'>SignUp</StyledLink></p></LinkContainer>

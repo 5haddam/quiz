@@ -16,6 +16,7 @@ import { darkModeTheme, lightModeTheme } from './styles/Themes';
 import { AppDiv } from './styles/styled';
 import thunks from './store/services/userInfo/thunks';
 import actions from './store/services/userInfo/actions';
+import { viewModeActions } from './store/services/viewMode';
 
 function App() {
   const { currentTheme } = useSelector((state) => state.themeReducer);
@@ -36,6 +37,18 @@ function App() {
       console.log(err);
     }
   }, [dispatch]);
+
+  useEffect(() => {
+    const handleResize = () => {
+      dispatch(viewModeActions.toogleViewModeAction(window.innerWidth < 768));
+    };
+
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
 
   useEffect(() => {
     if (isAuth) fetchUserData();
