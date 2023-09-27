@@ -85,6 +85,7 @@ const ModalChangeImage = ({ open, handleClose }) => {
       setSelectedFileError(true);
       setSelectedFileText('File size exceeds limit (max 100 KB)');
     } else {
+      setSelectedFileError(false);
       setSelectedFileText(`Selected file: ${selectedFile.name}`);
     }
   }, [selectedFile]);
@@ -137,7 +138,7 @@ const ModalChangeImage = ({ open, handleClose }) => {
               disabled={!isDispatchIsPossible}
               sx={{ width: '110px' }}
             >
-              <span>sign up</span>
+              <span>Change</span>
             </LoadingButton>
           </ButtonsWrapper>
         </Box>

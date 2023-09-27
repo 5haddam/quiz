@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, TextField } from '@mui/material';
+import { Button, TextField, Typography } from '@mui/material';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { useSelector } from 'react-redux';
 
@@ -31,10 +31,17 @@ const FileField = ({
               component="span"
               startIcon={<CloudUploadIcon />}
               fullWidth
-              sx={{ marginBottom: '60px' }}
+              sx={{ marginBottom: '5px' }}
             >
               {!selectedFile ? 'UpLoad File' : 'ReUpLoad File'}
             </Button>
+            <Typography
+              variant="body2"
+              color={selectedFileError ? 'error' : 'textSecondary'}
+              sx={{ marginBottom: '40px' }}
+            >
+              {selectedFileText}
+            </Typography>
           </label>
         </>)
         : (<>

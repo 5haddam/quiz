@@ -120,6 +120,7 @@ const SignUpPage = () => {
       setSelectedFileError(true);
       setSelectedFileText('File size exceeds limit (max 100 KB)');
     } else {
+      setSelectedFileError(false);
       setSelectedFileText(`Selected file: ${selectedFile.name}`);
     }
   }, [selectedFile]);
