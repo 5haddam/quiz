@@ -1,9 +1,11 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Skeleton } from '@mui/material';
+import { useSelector } from 'react-redux';
 import { StyledAvatar, StyledLink } from './styled';
 
-const ProfilePanel = ({ data }) => {
+const ProfilePanel = () => {
+  const { userData } = useSelector((state) => state.userInfoReducer);
   const navigate = useNavigate();
 
   const toProfile = () => {
@@ -12,10 +14,10 @@ const ProfilePanel = ({ data }) => {
 
   return (
     <>
-      {data
+      {userData
         ? <>
-            <StyledAvatar src={data.avatar} onClick={toProfile} />
-            <StyledLink to='/profile'>{data.name}</StyledLink>
+            <StyledAvatar src={userData.avatar} onClick={toProfile} />
+            <StyledLink to='/profile'>{userData.name}</StyledLink>
           </>
         : <>
             <Skeleton variant="circular" width={128} height={128} sx={{ marginBottom: '20px' }} />

@@ -10,7 +10,7 @@ const AuthenticationPanel = () => (
       <AuthDiv>
         <AuthLinkLeft><StyledLink to='/login'>LogIn</StyledLink></AuthLinkLeft>
         <StyledDivider orientation="vertical" variant="middle" />
-        <AuthLinkRight><StyledLink to='/signin'>Sign In</StyledLink></AuthLinkRight>
+        <AuthLinkRight><StyledLink to='/signup'>SignUp</StyledLink></AuthLinkRight>
       </AuthDiv>
     </>
 );

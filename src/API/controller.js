@@ -9,7 +9,7 @@ async function controller(action, method = 'GET', body = {}) {
     },
   };
 
-  if (body.length) params.data = body;
+  if (Object.keys(body).length) params.data = body;
 
   try {
     const response = await axios(params);

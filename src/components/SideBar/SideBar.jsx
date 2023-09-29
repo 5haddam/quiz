@@ -2,21 +2,29 @@ import React, { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { RxCross1 } from 'react-icons/rx';
 import { useTheme } from '@mui/material/styles';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   CloseButton, MaterialUISwitch, NavBar, Navigation, NavigationLink, PanelDiv,
 } from './styled';
 import AuthenticationPanel from '../AuthenticationPanel/AuthenticationPanel';
 import ProfilePanel from '../ProfilePanel/ProfilePanel';
+import actions from '../../store/services/theme/actions';
 
 const SideBar = ({
-  isNavBarOpen, toggleNavBarStatus, toggleTheme, isAuth, data,
+  isNavBarOpen, toggleNavBarStatus,
 }) => {
+  const { isAuth } = useSelector((state) => state.userInfoReducer);
   const location = useLocation();
   const theme = useTheme();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (isNavBarOpen) toggleNavBarStatus();
   }, [location]);
+
+  const toggleTheme = () => (
+    dispatch(actions.toogleCurrentThemeAction())
+  );
 
   return (
     <NavBar
@@ -31,7 +39,7 @@ const SideBar = ({
       <Navigation>
         <PanelDiv>
           {isAuth
-            ? <ProfilePanel data={data} />
+            ? <ProfilePanel />
             : <AuthenticationPanel />
           }
         </PanelDiv>
