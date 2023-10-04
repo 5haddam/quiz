@@ -36,6 +36,10 @@ const QuestionCard = () => {
 
   const currentQuestion = quiz.questionsArray[currentQuestionIndex];
 
+  console.log(Object.prototype.hasOwnProperty.call(ratings, quiz.mainData.title)
+    ? ratings[quiz.mainData.title]
+    : 0);
+
   return (
     <>
       {showResults ? (

@@ -27,7 +27,15 @@ const FewAnswerQuestion = ({
       }
     });
     handleAnswerChange(points >= 0 ? points : 0);
+    setSelectedValues({});
     handleSubmit();
+  };
+
+  const isChecked = (name) => {
+    if (selectedValues?.[name]) {
+      return true;
+    }
+    return false;
   };
 
   return (
@@ -41,6 +49,7 @@ const FewAnswerQuestion = ({
                 <Checkbox
                   name={`${optionIndex}`}
                   onChange={(e) => setSelectedValues({ ...selectedValues, [e.target.name]: e.target.checked })}
+                  checked={isChecked(`${optionIndex}`)}
                 />
               }
               label={option.option}

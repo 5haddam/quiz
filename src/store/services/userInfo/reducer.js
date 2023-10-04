@@ -56,6 +56,7 @@ export const userInfoReducer = createSlice({
       })
       .addCase(actions.setRaitingDataAction, (state, { payload }) => {
         state.ratings = { ...state.ratings, [payload.title]: payload.value };
+        console.log(state.rating);
       });
   },
 });

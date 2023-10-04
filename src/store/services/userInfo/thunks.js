@@ -46,6 +46,7 @@ const sendRaitingData = createAsyncThunk(`${moduleName}/sendRaitingData`, async 
   const quizBody = {
     rating: [newOverallRating, newNumberOfRatings],
   };
+  console.log(quizBody);
   controller(`${API}/quizzes/${quiz.mainData.id}`, 'PUT', quizBody);
   const response = controller(`${userAndCategoriesAPI}/users/${userId}`, 'PUT', userBody);
   return response;

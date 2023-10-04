@@ -19,6 +19,7 @@ const OneAnswerQuestion = ({
 
   const handleNext = () => {
     if (selectedValue !== null && currentQuestion.options[selectedValue].isRight) handleAnswerChange(1);
+    setSelectedValue(null);
     handleSubmit();
   };
 
@@ -29,6 +30,7 @@ const OneAnswerQuestion = ({
           <LabelForm>Select one answer:</LabelForm>
           <RadioGroup
             name={`question-${currentQuestionIndex}`}
+            value={selectedValue}
             onChange={(e) => setSelectedValue(e.target.value)}
           >
             {currentQuestion.options.map((option, optionIndex) => (
