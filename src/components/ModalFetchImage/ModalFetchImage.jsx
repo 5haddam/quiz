@@ -6,10 +6,9 @@ import {
   Backdrop, Box, Button, Fade,
 } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import FileField from '../FileField/FileField';
 import { ButtonsWrapper } from './styled';
-import thunks from '../../store/services/userInfo/thunks';
 import getBase64 from '../../API/getBase64';
 
 const style = {
@@ -29,7 +28,9 @@ const style = {
   },
 };
 
-const ModalChangeImage = ({ open, handleClose }) => {
+const ModalFetchImage = ({
+  open, handleClose, type, imageAdded, func,
+}) => {
   const [imageURL, setImageURL] = useState('');
   const [selectedFile, setSelectedFile] = useState(null);
   const [selectedFileError, setSelectedFileError] = useState(false);
@@ -38,7 +39,6 @@ const ModalChangeImage = ({ open, handleClose }) => {
   const [isSending, setIsSending] = useState(false);
 
   const { userData } = useSelector((state) => state.userInfoReducer);
-  const dispatch = useDispatch();
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
@@ -55,7 +55,7 @@ const ModalChangeImage = ({ open, handleClose }) => {
 
   const changeUserData = useCallback(async (params) => {
     try {
-      await dispatch(thunks.changeUserData(params));
+      await func(params);
       setIsSending(false);
       handleClose();
     } catch (err) {
@@ -65,13 +65,16 @@ const ModalChangeImage = ({ open, handleClose }) => {
   }, []);
 
   const newAvatarValidityCheck = async () => {
-    if (selectedFile && selectedFile.size <= 80000) {
+    if (imageURL || (selectedFile && selectedFile).size <= 80000) {
       (async () => {
         const body = {
           avatar: await getAvatar(),
         };
-
-        changeUserData({ id: userData.id, body });
+        if (type === 'request') {
+          changeUserData({ id: userData.id, body });
+        } else {
+          changeUserData(body.avatar);
+        }
         setIsSending(true);
       })();
     }
@@ -138,7 +141,7 @@ const ModalChangeImage = ({ open, handleClose }) => {
               disabled={!isDispatchIsPossible}
               sx={{ width: '110px' }}
             >
-              <span>Change</span>
+              <span>{imageAdded ? 'Change' : 'Add'}</span>
             </LoadingButton>
           </ButtonsWrapper>
         </Box>
@@ -148,4 +151,4 @@ const ModalChangeImage = ({ open, handleClose }) => {
   );
 };
 
-export default ModalChangeImage;
+export default ModalFetchImage;

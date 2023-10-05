@@ -7,7 +7,7 @@ import {
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
 import { useDispatch, useSelector } from 'react-redux';
 import actions from '../../store/services/userInfo/actions';
-import ModalChangeImage from '../../components/ModalChangeImage/ModalChangeImage';
+import ModalFetchImage from '../../components/ModalFetchImage/ModalFetchImage';
 import {
   ButtonWrapper,
   OwnQuizzesDiv,
@@ -20,6 +20,7 @@ import {
   UserInfoDiv,
   UserName,
 } from './styled';
+import thunks from '../../store/services/userInfo/thunks';
 
 const Profile = () => { // test version
   const { isAuth, userData } = useSelector((state) => state.userInfoReducer);
@@ -87,7 +88,12 @@ const Profile = () => { // test version
           <Button variant="contained" onClick={logout}>unlog</Button>
         </ButtonWrapper>
       </ProfileWrapper>
-      <ModalChangeImage open={open} handleClose={handleClose} />
+      <ModalFetchImage
+        open={open}
+        handleClose={handleClose}
+        type={'request'}
+        func={(params) => dispatch(thunks.changeUserData(params))}
+      />
     </>
   );
 };
